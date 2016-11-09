@@ -44,7 +44,6 @@ module ComicVine
     class ResourceNotSupportedError < ScriptError
     end
 
-
     ##
     # Raised when a ComicVine API error is encountered
     #
@@ -185,7 +184,7 @@ module ComicVine
       ##
       # Will fetch the provided +url+ as a {ComicVine::Resource}
       # @example
-      #   ComicVine::API.get_details_by_url("http://comicvine.gamespot.com/api/issue/4000-371103")
+      #   ComicVine::API.get_details_by_url('http://comicvine.gamespot.com/api/issue/4000-371103')
       # @param url [String]
       # @return [ComicVine::Resource]
       def get_details_by_url(url)
@@ -194,7 +193,7 @@ module ComicVine
       end
 
       ##
-      # Checks missing method against the resource {@@list list} and passes it to {find_list} or {get_details}
+      # Checks missing method against the resource {@@types types} and passes it to {find_list} or {get_details}
       def method_missing(method_sym, *arguments, &block)
         if find_list(method_sym)
           get_list method_sym, arguments.first
@@ -298,6 +297,5 @@ module ComicVine
       end
 
     end
-
   end
 end
