@@ -1,9 +1,9 @@
-require 'rest-client'
-require 'comicvine/helpers'
 require 'comicvine/version'
 require 'comicvine/list'
 require 'comicvine/resource'
+require 'rest-client'
 require 'cgi'
+require 'json'
 
 ## Yard Doc generation stuff
 # @!macro [new] raise.ResourceNotSupportedError
@@ -73,7 +73,7 @@ module ComicVine
     # @return [String]
     # @since 0.1.0
     def get_api_version
-      _make_request(:characters, limit: 1)['version'].to_s
+      _make_request(:types)['version'].to_s
     end
 
     ##
@@ -165,7 +165,7 @@ module ComicVine
     end
 
     ##
-    # Will fetch the provided +url+ as a ComicVine::CVObject
+    # Will fetch the provided +url+ as a ComicVine::Resource
     # @example
     #   api.get_details_by_url("http://comicvine.gamespot.com/api/issue/4000-371103")
     # @param url [String]
@@ -229,7 +229,6 @@ module ComicVine
     # @since 0.1.0
     # @macro raise.ComicVineAPIError
     def _make_url_request(url, **params)
-
       # Default options hash
       options = {
           params: {
@@ -242,8 +241,14 @@ module ComicVine
 
       begin
         # Perform request
-        request = RestClient.get(url, options)
-      rescue RestClient::NotFound, Error => e
+        request = RestClient::Request.execute(
+            method: :get,
+            url: url,
+            timeout: 10,
+            headers: options
+        )
+        #request = RestClient.get(url, options)
+      rescue RestClient::NotFound, RestClient::Exceptions::ReadTimeout => e
         raise ComicVineAPIError, e.message
       end
 
