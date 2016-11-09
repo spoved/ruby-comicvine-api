@@ -1,8 +1,8 @@
 require 'rest-client'
 require 'comicvine/helpers'
 require 'comicvine/version'
-require 'comicvine/cv_list'
-require 'comicvine/cv_object'
+require 'comicvine/list'
+require 'comicvine/resource'
 require 'cgi'
 
 ## Yard Doc generation stuff
@@ -30,7 +30,9 @@ module ComicVine
                    :power, :powers, :promo, :promos, :publisher, :publishers, :series, :series_list, :search, :story_arc,
                    :story_arcs, :team, :teams, :types, :video, :videos, :video_type, :video_types, :video_category,
                    :video_categories, :volume, :volumes]
-
+  ##
+  # Class to interact and query the ComicVine API
+  # @since 0.1.0
   class API
 
     ##
@@ -82,7 +84,7 @@ module ComicVine
     # @param resource [Symbol] The symbol of the resource to query
     # @param query [String] The string to query
     # @param params [Hash] optional parameters to pass to CV API
-    # @return [ComicVine::CVSearchList]
+    # @return [ComicVine::SearchResults]
     # @since 0.1.0
     def search(resource, query, **params)
 
@@ -93,7 +95,7 @@ module ComicVine
 
       options.merge! params
 
-      ComicVine::CVSearchList.new(_make_request(:search, options), resource, query)
+      ComicVine::SearchResults.new(_make_request(:search, options), resource, query)
     end
 
     ##
@@ -137,11 +139,11 @@ module ComicVine
     #   api.get_list(:volumes, limit: 50)
     # @param resource [Symbol] The symbol of the resource to fetch (plural)
     # @param params [Hash] optional parameters to pass to CV API
-    # @return [ComicVine::CVObjectList]
+    # @return [ComicVine::ResourceList]
     # @since 0.1.0
     def get_list(resource, **params)
       resp = _make_request(resource, params)
-      ComicVine::CVObjectList.new(resp, resource)
+      ComicVine::ResourceList.new(resp, resource)
     end
 
     ##
@@ -151,7 +153,7 @@ module ComicVine
     # @param resource [Symbol] The symbol of the resource to fetch
     # @param id [String] The id of the resource you would like to fetch
     # @param params [Hash] optional parameters to pass to CV API
-    # @return [ComicVine::CVObject]
+    # @return [ComicVine::Resource]
     # @since 0.1.0
     def get_details(resource, id, **params)
       ops_hash = {
@@ -159,7 +161,7 @@ module ComicVine
       }
       ops_hash.merge! params
       resp = _make_request(resource, ops_hash)
-      ComicVine::CVObject.new(resp['results'])
+      ComicVine::Resource.new(resp['results'])
     end
 
     ##
@@ -167,10 +169,10 @@ module ComicVine
     # @example
     #   api.get_details_by_url("http://comicvine.gamespot.com/api/issue/4000-371103")
     # @param url [String]
-    # @return [ComicVine::CVObject]
+    # @return [ComicVine::Resource]
     def get_details_by_url(url)
       resp = _make_url_request(url)
-      ComicVine::CVObject.new(resp['results'])
+      ComicVine::Resource.new(resp['results'])
     end
 
     private

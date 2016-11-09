@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Holden Omans']
   spec.email         = ['holden.omans@gmail.com']
 
-  spec.summary       = %q{imple api interface to Comic Vine.  Allows for searches and returning specific information on resources.}
+  spec.summary       = %q{Api interface to ComicVine.  Allows for searches and returning specific information on resources.}
   spec.description   = %q{Interface to ComicVine API}
   spec.homepage      = 'https://github.com/kalinon/ComicVine'
   spec.license       = 'MIT'

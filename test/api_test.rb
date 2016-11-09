@@ -32,7 +32,7 @@ class ApiTest < Minitest::Test
     end
 
     refute_nil resp
-    assert_kind_of ComicVine::CVSearchList, resp
+    assert_kind_of ComicVine::SearchResults, resp
     assert_equal 5, resp.count
   end
 
@@ -45,19 +45,19 @@ class ApiTest < Minitest::Test
 
   def test_get_list
     resp = @@client.get_list(:volumes, limit: 5)
-    assert_kind_of ComicVine::CVObjectList, resp
+    assert_kind_of ComicVine::ResourceList, resp
     assert_equal 5, resp.count
   end
 
   def test_get_details
     resp = @@client.get_details(:issue, '371103')
-    assert_kind_of ComicVine::CVObject, resp
+    assert_kind_of ComicVine::Resource, resp
     assert_equal 371103, resp.id
   end
 
   def test_get_details_by_url
     resp = @@client.get_details_by_url('http://comicvine.gamespot.com/api/issue/4000-371103')
-    assert_kind_of ComicVine::CVObject, resp
+    assert_kind_of ComicVine::Resource, resp
     assert_equal 371103, resp.id
   end
 
