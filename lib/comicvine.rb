@@ -178,18 +178,18 @@ module ComicVine
         }
         ops_hash.merge! params
         resp = _make_request(resource, ops_hash)
-        ComicVine::Resource.new(resp['results'])
+        ComicVine::Resource.create_resource(resp['results'])
       end
 
       ##
       # Will fetch the provided +url+ as a {ComicVine::Resource}
       # @example
-      #   ComicVine::API.get_details_by_url('http://comicvine.gamespot.com/api/issue/4000-371103')
+      #   ComicVine::API.get_details_by_url('http://comicvine.gamespot.com/api/issue/4000-371103') #=> ComicVine::Resource::Issue
       # @param url [String]
       # @return [ComicVine::Resource]
       def get_details_by_url(url)
         resp = _make_url_request(url)
-        ComicVine::Resource.new(resp['results'])
+        ComicVine::Resource::create_resource(resp['results'])
       end
 
       ##
@@ -199,8 +199,7 @@ module ComicVine
           get_list method_sym, arguments.first
         elsif find_detail(method_sym)
           get_details method_sym, *arguments
-        elsif
-        super
+        elsif super
         end
       end
 

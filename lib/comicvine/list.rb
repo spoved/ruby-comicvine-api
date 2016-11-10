@@ -53,7 +53,7 @@ module ComicVine
       super(resp)
 
       @resource = resc
-      @cvos = resp['results'].map { |r| ComicVine::Resource.new(r) }
+      @cvos = resp['results'].map { |r| ComicVine::Resource.create_resource(r) }
     end
 
     def next_page
@@ -79,7 +79,7 @@ module ComicVine
 
       @resource = resc
       @query = query
-      @cvos = resp['results'].map { |r| ComicVine::Resource.new(r) }
+      @cvos = resp['results'].map { |r| ComicVine::Resource.create_resource(r) }
     end
 
     ##
