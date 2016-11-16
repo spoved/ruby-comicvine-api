@@ -65,11 +65,11 @@ class ApiTest < Minitest::Test
     end
 
     assert_raises ComicVine::API::ComicVineAPIError do
-      puts ComicVine::API.get_details_by_url('http://comicvine.gamespot.com/api/issuesx/371103')
+      ComicVine::API.get_details_by_url('http://comicvine.gamespot.com/api/issuesx/371103')
     end
 
     assert_raises ComicVine::API::ComicVineAPIError do
-      puts ComicVine::API.get_details_by_url('http://comicvine.gamespot.com/api/issue/371103')
+      ComicVine::API.get_details_by_url('http://comicvine.gamespot.com/api/issue/371103')
     end
 
   end

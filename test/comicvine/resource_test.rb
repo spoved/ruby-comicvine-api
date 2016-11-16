@@ -1,5 +1,6 @@
 require 'test_helper'
 require 'json'
+require 'comicvine/resource/resources'
 
 class ResourceTest < Minitest::Test
 
@@ -34,6 +35,7 @@ class ResourceTest < Minitest::Test
       assert_kind_of ComicVine::Resource, obj
       assert_kind_of ComicVine::Resource::Issue, obj
     end
+    assert_kind_of ComicVine::Resource::Issue, ComicVine::Resource.create_resource(hash)
   end
 
 end

@@ -2,6 +2,24 @@ module ComicVine
   class Resource
 
     ##
+    # Takes hash and returns a subclass of {ComicVine::Resource} based on identified type
+    #
+    # @example
+    #   ComicVine::Resource.create_resource(hash) #=> #<ComicVine::Resource::Issue:0x007fa6a427bbe8>
+    #
+    # @param attr [Hash]
+    # @return [ComicVine::Resource]
+    # @since 0.1.2
+    def self.create_resource(attr)
+      type = ComicVine::Resource::identify_and_update_response(attr)
+      if type
+        Object.class_eval('ComicVine::Resource::' + type.to_s.capitalize).new attr
+      else
+        raise ScriptError, 'Unknown type for api_detail_url: ' + attr['api_detail_url']
+      end
+    end
+
+    ##
     # Extends {ComicVine::Resource} to add character resource attributes
     # # @since 0.1.2
     class Character < ComicVine::Resource
@@ -44,12 +62,12 @@ module ComicVine
     # Extends {ComicVine::Resource} to add issue resource attributes
     # @since 0.1.2
     class Issue < ComicVine::Resource
-      attr_accessor :aliases, :api_detail_url, :character_credits, :characters_died_in, :concept_credits, :cover_date,
+      attr_accessor :aliases, :api_detail_url, :character_credits, :character_died_in, :concept_credits, :cover_date,
                     :date_added, :date_last_updated, :deck, :description, :disbanded_teams,
                     :first_appearance_characters, :first_appearance_concepts, :first_appearance_locations,
                     :first_appearance_objects, :first_appearance_storyarcs, :first_appearance_teams, :has_staff_review,
                     :id, :image, :issue_number, :location_credits, :name, :object_credits, :person_credits,
-                    :site_detail_url, :store_date, :story_arc_credits, :team_credits, :teams_disbanded_in, :volume
+                    :site_detail_url, :store_date, :story_arc_credits, :team_credits, :team_disbanded_in, :volume
     end
 
     ##
@@ -84,7 +102,7 @@ module ComicVine
     # Extends {ComicVine::Resource} to add origin resource attributes
     # @since 0.1.2
     class Origin < ComicVine::Resource
-      attr_accessor :api_detail_url, :character_set, :id, :name, :profiles, :site_detail_url
+      attr_accessor :api_detail_url, :character_set, :characters, :id, :name, :profiles, :site_detail_url
     end
 
     ##
@@ -100,7 +118,7 @@ module ComicVine
     # Extends {ComicVine::Resource} to add power resource attributes
     # @since 0.1.2
     class Power < ComicVine::Resource
-      attr_accessor :attr_accessor, :aliases, :api_detail_url, :characters, :date_added, :date_last_updated,
+      attr_accessor :aliases, :api_detail_url, :characters, :date_added, :date_last_updated,
                     :description, :id, :name, :site_detail_url
     end
 
