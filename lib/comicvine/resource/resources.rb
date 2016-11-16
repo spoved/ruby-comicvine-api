@@ -1,13 +1,28 @@
 module ComicVine
-  ##
-  # Holds the various modules for ComicVine resource attributes
-  # @since 0.1.0
-  module ResourceAttributes
+  class Resource
 
     ##
-    # Module to hold character resource attributes
-    # @since 0.1.0
-    module Character
+    # Takes hash and returns a subclass of {ComicVine::Resource} based on identified type
+    #
+    # @example
+    #   ComicVine::Resource.create_resource(hash) #=> #<ComicVine::Resource::Issue:0x007fa6a427bbe8>
+    #
+    # @param attr [Hash]
+    # @return [ComicVine::Resource]
+    # @since 0.1.2
+    def self.create_resource(attr)
+      type = ComicVine::Resource::identify_and_update_response(attr)
+      if type
+        Object.class_eval('ComicVine::Resource::' + type.to_s.capitalize).new attr
+      else
+        raise ScriptError, 'Unknown type for api_detail_url: ' + attr['api_detail_url']
+      end
+    end
+
+    ##
+    # Extends {ComicVine::Resource} to add character resource attributes
+    # # @since 0.1.2
+    class Character < ComicVine::Resource
       attr_accessor :aliases, :api_detail_url, :birth, :character_enemies, :character_friends,
                     :count_of_issue_appearances, :creators, :date_added, :date_last_updated, :deck, :description,
                     :first_appeared_in_issue, :gender, :id, :image, :issue_credits, :issues_died_in, :movies, :name,
@@ -16,25 +31,25 @@ module ComicVine
     end
 
     ##
-    # Module to hold chat resource attributes
-    # @since 0.1.0
-    module Chat
+    # Extends {ComicVine::Resource} to add chat resource attributes
+    # @since 0.1.2
+    class Chat < ComicVine::Resource
       attr_accessor :api_detail_url, :channel_name, :deck, :image, :password, :site_detail_url, :title
     end
 
     ##
-    # Module to hold concept resource attributes
-    # @since 0.1.0
-    module Concept
+    # Extends {ComicVine::Resource} to add concept resource attributes
+    # @since 0.1.2
+    class Concept < ComicVine::Resource
       attr_accessor :aliases, :api_detail_url, :count_of_issue_appearances, :date_added, :date_last_updated, :deck,
                     :description, :first_appeared_in_issue, :id, :image, :issue_credits, :movies, :name,
                     :site_detail_url, :start_year, :volume_credits
     end
 
     ##
-    # Module to hold episode resource attributes
-    # @since 0.1.0
-    module Episode
+    # Extends {ComicVine::Resource} to add episode resource attributes
+    # @since 0.1.2
+    class Episode < ComicVine::Resource
       attr_accessor :aliases, :api_detail_url, :character_credits, :characters_died_in, :concept_credits, :air_date,
                     :date_added, :date_last_updated, :deck, :description, :first_appearance_characters,
                     :first_appearance_concepts, :first_appearance_locations, :first_appearance_objects,
@@ -44,30 +59,30 @@ module ComicVine
     end
 
     ##
-    # Module to hold issue resource attributes
-    # @since 0.1.0
-    module Issue
-      attr_accessor :aliases, :api_detail_url, :character_credits, :characters_died_in, :concept_credits, :cover_date,
+    # Extends {ComicVine::Resource} to add issue resource attributes
+    # @since 0.1.2
+    class Issue < ComicVine::Resource
+      attr_accessor :aliases, :api_detail_url, :character_credits, :character_died_in, :concept_credits, :cover_date,
                     :date_added, :date_last_updated, :deck, :description, :disbanded_teams,
                     :first_appearance_characters, :first_appearance_concepts, :first_appearance_locations,
                     :first_appearance_objects, :first_appearance_storyarcs, :first_appearance_teams, :has_staff_review,
                     :id, :image, :issue_number, :location_credits, :name, :object_credits, :person_credits,
-                    :site_detail_url, :store_date, :story_arc_credits, :team_credits, :teams_disbanded_in, :volume
+                    :site_detail_url, :store_date, :story_arc_credits, :team_credits, :team_disbanded_in, :volume
     end
 
     ##
-    # Module to hold location resource attributes
-    # @since 0.1.0
-    module Location
+    # Extends {ComicVine::Resource} to add location resource attributes
+    # @since 0.1.2
+    class Location < ComicVine::Resource
       attr_accessor :aliases, :api_detail_url, :count_of_issue_appearances, :date_added, :date_last_updated, :deck,
                     :description, :first_appeared_in_issue, :id, :image, :issue_credits, :movies, :name,
                     :site_detail_url, :start_year, :story_arc_credits, :volume_credits
     end
 
     ##
-    # Module to hold movie resource attributes
-    # @since 0.1.0
-    module Movie
+    # Extends {ComicVine::Resource} to add movie resource attributes
+    # @since 0.1.2
+    class Movie < ComicVine::Resource
       attr_accessor :api_detail_url, :box_office_revenue, :budget, :characters, :concepts, :date_added,
                     :date_last_updated, :deck, :description, :distributor, :has_staff_review, :id, :image, :locations,
                     :name, :producers, :rating, :release_date, :runtime, :site_detail_url, :studios, :teams, :things,
@@ -75,75 +90,76 @@ module ComicVine
     end
 
     ##
-    # Module to hold object resource attributes
-    # @since 0.1.0
-    module Object
+    # Extends {ComicVine::Resource} to add object resource attributes
+    # @since 0.1.2
+    class Object < ComicVine::Resource
       attr_accessor :aliases, :api_detail_url, :count_of_issue_appearances, :date_added, :date_last_updated, :deck,
                     :description, :first_appeared_in_issue, :id, :image, :issue_credits, :movies, :name,
                     :site_detail_url, :start_year, :story_arc_credits, :volume_credits
     end
 
     ##
-    # Module to hold origin resource attributes
-    # @since 0.1.0
-    module Origin
-      attr_accessor :api_detail_url, :character_set, :id, :name, :profiles, :site_detail_url
+    # Extends {ComicVine::Resource} to add origin resource attributes
+    # @since 0.1.2
+    class Origin < ComicVine::Resource
+      attr_accessor :api_detail_url, :character_set, :characters, :id, :name, :profiles, :site_detail_url
     end
 
     ##
-    # Module to hold person resource attributes
-    # @since 0.1.0
-    module Person
+    # Extends {ComicVine::Resource} to add person resource attributes
+    # @since 0.1.2
+    class Person < ComicVine::Resource
       attr_accessor :aliases, :api_detail_url, :birth, :count_of_issue_appearances, :country, :created_characters,
                     :date_added, :date_last_updated, :death, :deck, :description, :email, :gender, :hometown, :id,
                     :image, :issue_credits, :name, :site_detail_url, :story_arc_credits, :volume_credits, :website
     end
 
     ##
-    # Module to hold power resource attributes
-    # @since 0.1.0
-    module Power
-      attr_accessor :attr_accessor, :aliases, :api_detail_url, :characters, :date_added, :date_last_updated,
+    # Extends {ComicVine::Resource} to add power resource attributes
+    # @since 0.1.2
+    class Power < ComicVine::Resource
+      attr_accessor :aliases, :api_detail_url, :characters, :date_added, :date_last_updated,
                     :description, :id, :name, :site_detail_url
     end
 
     ##
-    # Module to hold promo resource attributes
-    # @since 0.1.0
-    module Promo
+    # Extends {ComicVine::Resource} to add promo resource attributes
+    # @since 0.1.2
+    class Promo < ComicVine::Resource
       attr_accessor :api_detail_url, :date_added, :deck, :id, :image, :link, :name, :resource_type, :user
     end
 
     ##
-    # Module to hold publisher resource attributes
-    # @since 0.1.0
-    module Publisher
+    # Extends {ComicVine::Resource} to add publisher resource attributes
+    # @since 0.1.2
+    class Publisher < ComicVine::Resource
       attr_accessor :aliases, :api_detail_url, :characters, :date_added, :date_last_updated, :deck, :description, :id,
                     :image, :location_address, :location_city, :location_state, :name, :site_detail_url, :story_arcs,
                     :teams, :volumes
     end
+
     ##
-    # Module to hold series resource attributes
-    # @since 0.1.0
-    module Series
+    # Extends {ComicVine::Resource} to add series resource attributes
+    # @since 0.1.2
+    class Series < ComicVine::Resource
       attr_accessor :aliases, :api_detail_url, :character_credits, :count_of_episodes, :date_added, :date_last_updated,
                     :deck, :description, :first_episode, :id, :image, :last_episode, :location_credits, :name,
                     :publisher, :site_detail_url, :start_year
     end
 
     ##
-    # Module to hold story_arc resource attributes
-    # @since 0.1.0
-    module StoryArc
+    # Extends {ComicVine::Resource} to add story_arc resource attributes
+    # @since 0.1.2
+    class StoryArc < ComicVine::Resource
       attr_accessor :aliases, :api_detail_url, :count_of_issue_appearances, :date_added, :date_last_updated, :deck,
                     :description, :first_appeared_in_issue, :id, :image, :issues, :movies, :name, :publisher,
                     :site_detail_url
     end
 
     ##
-    # Module to hold team resource attributes
-    # @since 0.1.0
-    module Team
+    # Extends {ComicVine::Resource} to add team resource attributes
+    # @since 0.1.2
+    class Team < ComicVine::Resource
       attr_accessor :aliases, :api_detail_url, :character_enemies, :character_friends, :characters,
                     :count_of_issue_appearances, :count_of_team_members, :date_added, :date_last_updated, :deck,
                     :description, :disbanded_in_issues, :first_appeared_in_issue, :id, :image, :issue_credits,
@@ -152,41 +168,55 @@ module ComicVine
     end
 
     ##
-    # Module to hold type resource attributes
-    # @since 0.1.0
-    module Type
+    # Extends {ComicVine::Resource} to add type resource attributes
+    # @since 0.1.2
+    class Type < ComicVine::Resource
       attr_accessor :detail_resource_name, :list_resource_name, :id
     end
 
     ##
-    # Module to hold video resource attributes
-    # @since 0.1.0
-    module Video
+    # Extends {ComicVine::Resource} to add video resource attributes
+    # @since 0.1.2
+    class Video < ComicVine::Resource
       attr_accessor :api_detail_url, :deck, :hd_url, :high_url, :id, :image, :length_seconds, :low_url, :name,
                     :publish_date, :site_detail_url, :url, :user
     end
 
     ##
-    # Module to hold video_category resource attributes
-    # @since 0.1.0
-    module VideoCategory
+    # Extends {ComicVine::Resource} to add video_category resource attributes
+    # @since 0.1.2
+    class VideoCategory < ComicVine::Resource
       attr_accessor :api_detail_url, :deck, :id, :name, :site_detail_url
     end
 
     ##
-    # Module to hold video_type resource attributes
-    # @since 0.1.0
-    module VideoType
+    # Extends {ComicVine::Resource} to add video_type resource attributes
+    # @since 0.1.2
+    class VideoType < ComicVine::Resource
       attr_accessor :api_detail_url, :deck, :id, :name, :site_detail_url
     end
 
     ##
-    # Module to hold volume resource attributes
-    # @since 0.1.0
-    module Volume
+    # Extends {ComicVine::Resource} to add volume resource attributes
+    # @since 0.1.2
+    class Volume < ComicVine::Resource
       attr_accessor :aliases, :api_detail_url, :character_credits, :concept_credits, :count_of_issues, :date_added,
                     :date_last_updated, :deck, :description, :first_issue, :id, :image, :last_issue, :location_credits,
                     :name, :object_credits, :person_credits, :publisher, :site_detail_url, :start_year, :team_credits
+    end
+
+    ##
+    # Extends {ComicVine::Resource} to add review resource attributes
+    # @since 0.1.2
+    class Review < ComicVine::Resource
+      attr_accessor :api_detail_url, :id, :name, :site_detail_url
+
+      # @private
+      # @since 0.1.2
+      def fetch
+        self
+      end
+
     end
 
   end

@@ -59,6 +59,9 @@ module ComicVine
     # ComicVine API Key. Set to the environmental variable CV_API_KEY by default if present
     @@api_key = ENV['CV_API_KEY'] || nil
 
+    # Api response timeout in seconds
+    @@api_timeout = 10
+
     class << self
 
       ##
@@ -83,6 +86,22 @@ module ComicVine
       # @since 0.1.0
       def api_key=(key)
         @@api_key = key
+      end
+
+      ##
+      # Returns ComicVine API request timeout value
+      # @return [Integer]
+      # @since 0.1.2
+      def api_timeout
+        @@api_timeout
+      end
+
+      ##
+      # Sets the ComicVine API request timeout value in seconds
+      # @param seconds [Integer]
+      # @since 0.1.0
+      def api_timeout=(seconds)
+        @@api_timeout = seconds.to_i
       end
 
       ##
@@ -178,18 +197,18 @@ module ComicVine
         }
         ops_hash.merge! params
         resp = _make_request(resource, ops_hash)
-        ComicVine::Resource.new(resp['results'])
+        ComicVine::Resource.create_resource(resp['results'])
       end
 
       ##
       # Will fetch the provided +url+ as a {ComicVine::Resource}
       # @example
-      #   ComicVine::API.get_details_by_url('http://comicvine.gamespot.com/api/issue/4000-371103')
+      #   ComicVine::API.get_details_by_url('http://comicvine.gamespot.com/api/issue/4000-371103') #=> ComicVine::Resource::Issue
       # @param url [String]
       # @return [ComicVine::Resource]
       def get_details_by_url(url)
         resp = _make_url_request(url)
-        ComicVine::Resource.new(resp['results'])
+        ComicVine::Resource::create_resource(resp['results'])
       end
 
       ##
@@ -199,8 +218,7 @@ module ComicVine
           get_list method_sym, arguments.first
         elsif find_detail(method_sym)
           get_details method_sym, *arguments
-        elsif
-        super
+        elsif super
         end
       end
 
@@ -269,11 +287,13 @@ module ComicVine
         options[:params].merge! params
 
         begin
+          # Sleep for 1 sec to avoid rate limit
+          sleep 1
           # Perform request
           request = RestClient::Request.execute(
               method: :get,
               url: url,
-              timeout: 10,
+              timeout: self.api_timeout,
               headers: options
           )
             #request = RestClient.get(url, options)
