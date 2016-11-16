@@ -29,7 +29,7 @@ Then set a environmental variable named `CV_API_KEY` to your ComicVine API key *
 If you did not set the env variable `CV_API_KEY` then you need to set the class `api_key` before using. If you did set the env variable you do not need to set this.
 
 ```ruby
-resp = ComicVine::API.api_key = '18357f40df87fb4a4aa6bbbb27cd8ad1deb08d3e'
+ComicVine::API.api_key = '18357f40df87fb4a4aa6bbbb27cd8ad1deb08d3e'
 ```
 
 Gather response from a url:

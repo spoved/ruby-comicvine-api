@@ -19,7 +19,7 @@ end
 # Default task
 task :default => :test
 
-task :gen_checksum do
+Rake::Task['build'].enhance do
   require 'digest/sha2'
   built_gem_path = 'pkg/comicvine-'+ComicVine::VERSION+'.gem'
   checksum = Digest::SHA256.new.hexdigest(File.read(built_gem_path))
