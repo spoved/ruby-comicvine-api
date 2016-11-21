@@ -27,8 +27,24 @@ module ComicVine
       @cvos.last
     end
 
+    # Returns the current page the object is on
+    # @return [Integer]
     def page
       (@offset / @limit) + 1
+    end
+
+    # Returns the total number of pages available
+    # @return [Integer] Total number of pages
+    # @since 0.1.3
+    def total_pages
+      (self.total_count / self.limit) + 1
+    end
+
+    # Returns if there are more pages to load
+    # @return [true, false]
+    # @since 0.1.3
+    def has_more?
+      self.total_pages > self.page ? true : false
     end
 
     protected
@@ -37,7 +53,6 @@ module ComicVine
       @total_count = new_cvol.total_count
       @offset = new_cvol.offset
       @limit = new_cvol.limit
-
       @cvos = new_cvol.cvos
     end
 
@@ -56,15 +71,21 @@ module ComicVine
       @cvos = resp['results'].map { |r| ComicVine::Resource.create_resource(r) }
     end
 
+    # Loads the next page results
     def next_page
       return nil if (@offset + @page_count) >= @total_count
       update_ivals(ComicVine::API.send(@resource, {:limit => @limit, :offset => (@offset + @page_count)}))
     end
 
+    # Loads the previous page results
     def prev_page
       return nil if @offset == 0
       update_ivals(ComicVine::API.send(@resource, {:limit => @limit, :offset => (@offset - @page_count)}))
     end
+
+    alias_method :next_page!, :next_page
+    alias_method :prev_page!, :prev_page
+
   end
 
   ##
