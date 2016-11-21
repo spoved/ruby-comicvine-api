@@ -9,7 +9,7 @@ require 'json'
 # @!macro [new] raise.ResourceNotSupportedError
 #   @raise [ResourceNotSupportedError] indicating the resource requested is not supported
 # @!macro [new] raise.ComicVineAPIError
-#   @raise [ComicVineAPIError] indicating the api request code recived
+#   @raise [ComicVineAPIError] indicating the api request code received
 
 ##
 # Base ComicVine module, holds default api variables
