@@ -30,7 +30,7 @@ module ComicVine
     # Returns the current page the object is on
     # @return [Integer]
     def page
-      (@offset / @limit) + 1
+      (self.offset / self.limit) + 1
     end
 
     # Returns the total number of pages available
@@ -51,8 +51,8 @@ module ComicVine
 
     def update_ivals(new_cvol)
       @total_count = new_cvol.total_count
-      @offset = new_cvol.offset
-      @limit = new_cvol.limit
+      @offset = new_cvol.offset || 0
+      @limit = new_cvol.limit || 0
       @cvos = new_cvol.cvos
     end
 
