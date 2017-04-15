@@ -1,6 +1,7 @@
 require 'bundler/gem_tasks'
 require 'rake/testtask'
 require 'yard'
+require 'dotenv/load'
 
 # Test tasks
 Rake::TestTask.new(:test) do |t|
@@ -25,4 +26,13 @@ Rake::Task['build'].enhance do
   checksum = Digest::SHA256.new.hexdigest(File.read(built_gem_path))
   checksum_path = 'checksum/comicvine-'+ComicVine::VERSION+'.gem.sha256'
   File.open(checksum_path, 'w' ) {|f| f.write(checksum) }
+end
+
+task :console do
+  require 'irb'
+  require 'irb/completion'
+  require 'comicvine'
+
+  ARGV.clear
+  IRB.start
 end
