@@ -19,7 +19,7 @@ module ComicVine
   API_VERSION = '1.0'
 
   # Base ComicVine url
-  API_URL = 'http://comicvine.gamespot.com/api'
+  API_URL = 'https://comicvine.gamespot.com/api'
 
   # ComicVine format (json)
   API_FORMAT = 'json'

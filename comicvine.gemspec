@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Api interface to ComicVine.  Allows for searches and returning specific information on resources.}
   spec.description   = %q{Interface to ComicVine API}
-  spec.homepage      = 'https://github.com/kalinon/ruby-comicvine-api'
+  spec.homepage      = 'https://github.com/spoved/ruby-comicvine-api'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
@@ -31,6 +31,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'minitest-reporters', '~> 1.1', '>= 1.1.12'
   spec.add_development_dependency 'rdoc', '~> 4.2', '>= 4.2.1'
   spec.add_development_dependency 'yard', '~> 0.9', '>= 0.9.5'
+  spec.add_development_dependency 'minitest-vcr', '~> 1.4'
+  spec.add_development_dependency 'dotenv-rails'
 
   # Dependencies
   spec.add_dependency 'rest-client', '~> 2.0'

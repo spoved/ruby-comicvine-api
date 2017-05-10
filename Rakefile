@@ -1,6 +1,7 @@
 require 'bundler/gem_tasks'
 require 'rake/testtask'
 require 'yard'
+require 'dotenv/load'
 
 # Test tasks
 Rake::TestTask.new(:test) do |t|
