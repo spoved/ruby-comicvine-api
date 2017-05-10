@@ -26,7 +26,7 @@ class ApiTest < Minitest::Test
   def test_search
     resp = nil
     assert_nothing_raised do
-      resp = ComicVine::API.search(:volume, 'Avengers ', limit: 5)
+      resp = ComicVine::API.search(:volume, 'Avengers', limit: 5)
     end
 
     refute_nil resp

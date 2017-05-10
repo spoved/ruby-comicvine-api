@@ -239,9 +239,9 @@ module ComicVine
       def _build_base_url(resource, id = nil)
         if ComicVine::API_RESOURCES.include? resource
           if !id.nil?
-            API_URL + '/' + resource.to_s + '/' + "#{self.find_detail(resource)['id']}-#{id.to_s}"
+            API_URL + '/' + resource.to_s + '/' + "#{self.find_detail(resource)['id']}-#{id.to_s}/"
           else
-            API_URL + '/' + resource.to_s
+            API_URL + '/' + resource.to_s + '/'
           end
         else
           raise ResourceNotSupportedError, resource.to_s + ' is not a supported resource'

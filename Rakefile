@@ -27,3 +27,12 @@ Rake::Task['build'].enhance do
   checksum_path = 'checksum/comicvine-'+ComicVine::VERSION+'.gem.sha256'
   File.open(checksum_path, 'w' ) {|f| f.write(checksum) }
 end
+
+task :console do
+  require 'irb'
+  require 'irb/completion'
+  require 'comicvine'
+
+  ARGV.clear
+  IRB.start
+end
